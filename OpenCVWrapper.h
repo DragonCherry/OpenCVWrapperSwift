@@ -8,10 +8,12 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
+#import <CoreMedia/CoreMedia.h>
 
 @interface OpenCVWrapper : NSObject
     
 - (NSString *)versionString;
-- (int)blurryMetrics:(UIImage *)image;
+- (double)blurryMetricsFromImage:(UIImage *)image;
+- (double)blurryMetricsFromSampleBuffer:(CMSampleBufferRef)sampleBuffer;
     
 @end

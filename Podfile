@@ -6,9 +6,23 @@ target 'OpenCVWrapperSwift' do
     use_frameworks!
     
     # Pods for OpenCVWrapperSwift
-    pod 'SwiftyBeaver'
+    pod 'TinyLog'
     pod 'HFAlert'
     pod 'SwiftARGB'
     pod 'AttachLayout'
-    pod 'CameraPreviewController'
+    pod 'CameraPreviewController', :path => '../CameraPreviewController/'
+end
+
+post_install do |installer|
+    installer.pods_project.targets.each do |target|
+        if target.name == 'TinyLog'
+            target.build_configurations.each do |config|
+                if config.name == 'Debug'
+                    config.build_settings['OTHER_SWIFT_FLAGS'] = '-D' 'DEBUG'
+                    else
+                    config.build_settings['OTHER_SWIFT_FLAGS'] = ''
+                end
+            end
+        end
+    end
 end

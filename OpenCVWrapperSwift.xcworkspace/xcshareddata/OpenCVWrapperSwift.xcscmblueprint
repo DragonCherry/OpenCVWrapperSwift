@@ -1,0 +1,30 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "930AD41546EF018ED5193277DF11A80BE0A99EB2",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "4751BF166A552414BB9DD3F64BBBF32BE7FF85A3" : 9223372036854775807,
+    "930AD41546EF018ED5193277DF11A80BE0A99EB2" : 9223372036854775807
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "FC4770C9-C05F-4862-A17E-408B76A4EE1A",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "4751BF166A552414BB9DD3F64BBBF32BE7FF85A3" : "CameraPreviewController\/",
+    "930AD41546EF018ED5193277DF11A80BE0A99EB2" : "OpenCVWrapperSwift\/"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "OpenCVWrapperSwift",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "OpenCVWrapperSwift.xcworkspace",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/DragonCherry\/CameraPreviewController",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "4751BF166A552414BB9DD3F64BBBF32BE7FF85A3"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/DragonCherry\/OpenCVWrapperSwift",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "930AD41546EF018ED5193277DF11A80BE0A99EB2"
+    }
+  ]
+}

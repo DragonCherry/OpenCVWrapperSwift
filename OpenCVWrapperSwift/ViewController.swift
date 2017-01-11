@@ -7,16 +7,29 @@
 //
 
 import UIKit
+import GPUImage
 import CameraPreviewController
-import SwiftyBeaver
+import TinyLog
+import AttachLayout
 
 class ViewController: CameraPreviewController {
 
     let cv = OpenCVWrapper()
+    var label: UILabel!
+    
+    override func loadView() {
+        super.loadView()
+        cameraPosition = .back
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        log.verbose("OpenCV version: \(cv.versionString())")
+        logv("OpenCV version: \(cv.versionString())")
+        
+        self.delegate = self
+        
+        label = UILabel(height: 50)
+        
     }
 
     override func didReceiveMemoryWarning() {
@@ -25,3 +38,21 @@ class ViewController: CameraPreviewController {
     }
 }
 
+
+extension ViewController: CameraPreviewControllerDelegate {
+    
+    func cameraPreviewWillOutputSampleBuffer(buffer: CMSampleBuffer) {
+    }
+    
+    func cameraPreviewNeedsLayout(preview: GPUImageView) {
+        
+    }
+    
+    func cameraPreviewPreferredFillMode(preview: GPUImageView) -> Bool {
+        return false
+    }
+    
+    func cameraPreviewDetectedFaces(preview: GPUImageView, features: [CIFeature]?, aperture: CGRect, orientation: UIDeviceOrientation) {
+        
+    }
+}

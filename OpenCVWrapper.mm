@@ -10,40 +10,41 @@
 #import "OpenCVWrapper.h"
 
 @implementation OpenCVWrapper
-    
+
 - (NSString *)versionString {
     return [NSString stringWithFormat:@"OpenCV version: %s", CV_VERSION];
 }
+
+- (double)blurryMetricsFromCVMat:(cv::Mat)matImage {
     
-- (int)blurryMetrics:(UIImage *)image {
-    // converting UIImage to OpenCV format - Mat
-    cv::Mat matImage = [self convertUIImageToCVMat:image];
-    cv::Mat matImageGrey;
-    // converting image's color space (RGB) to grayscale
-    cv::cvtColor(matImage, matImageGrey, CV_BGR2GRAY);
-    
-    cv::Mat dst2 = [self convertUIImageToCVMat:image];
+    cv::Mat grayImage;
     cv::Mat laplacianImage;
-    dst2.convertTo(laplacianImage, CV_8UC1);
     
-    // applying Laplacian operator to the image
-    cv::Laplacian(matImageGrey, laplacianImage, CV_8U);
+    cv::cvtColor(matImage, grayImage, CV_BGR2GRAY);
+    matImage.convertTo(laplacianImage, CV_8UC1);
+    
+    cv::Laplacian(grayImage, laplacianImage, CV_8U);
     cv::Mat laplacianImage8bit;
-    laplacianImage.convertTo(laplacianImage8bit, CV_8UC1);
+    laplacianImage.convertTo(laplacianImage8bit, CV_8U);
     
     unsigned char *pixels = laplacianImage8bit.data;
+    unsigned long loop = laplacianImage8bit.elemSize() * laplacianImage8bit.total();
+    double totalLap = 0;
     
-    // 16777216 = 256 * 256 * 256
-    int maxLap = -16777216;
-    for (int i = 0; i < (laplacianImage8bit.elemSize() * laplacianImage8bit.total()); i++) {
-        if (pixels[i] > maxLap) {
-            maxLap = pixels[i];
-        }
+    for (int i = 0; i < loop; i++) {
+        totalLap += pixels[i];
     }
-    
-    return maxLap;
+    return totalLap / loop;
 }
-    
+
+- (double)blurryMetricsFromSampleBuffer:(CMSampleBufferRef)sampleBuffer {
+    return [self blurryMetricsFromCVMat: [self convertCMSampleBufferToCVMat: sampleBuffer]];
+}
+
+- (double)blurryMetricsFromImage:(UIImage *)image {
+    return [self blurryMetricsFromCVMat: [self convertUIImageToCVMat:image]];
+}
+
 - (cv::Mat)convertUIImageToCVMat:(UIImage *)image {
     CGColorSpaceRef colorSpace = CGImageGetColorSpace(image.CGImage);
     CGFloat cols = image.size.width;
@@ -65,5 +66,29 @@
     
     return cvMat;
 }
+
+- (cv::Mat)convertCMSampleBufferToCVMat:(CMSampleBufferRef)sampleBuffer {
+    CVImageBufferRef imgBuf = CMSampleBufferGetImageBuffer(sampleBuffer);
     
-    @end
+    // lock the buffer
+    CVPixelBufferLockBaseAddress(imgBuf, 0);
+    
+    // get the address to the image data
+    void *imgBufAddr = CVPixelBufferGetBaseAddressOfPlane(imgBuf, 0);
+    
+    // get image properties
+    int w = (int)CVPixelBufferGetWidth(imgBuf);
+    int h = (int)CVPixelBufferGetHeight(imgBuf);
+    
+    // create the cv mat
+    cv::Mat image;
+    image.create(h, w, CV_8UC4);
+    memcpy(image.data, imgBufAddr, w * h);
+    
+    // unlock again
+    CVPixelBufferUnlockBaseAddress(imgBuf, 0);
+    
+    return image;
+}
+
+@end
