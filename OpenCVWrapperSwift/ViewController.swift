@@ -45,7 +45,7 @@ extension ViewController: CameraPreviewControllerDelegate {
         
         if captureSequence % 5 == 0 {
             DispatchQueue.main.async {
-                let blurryMetrics = self.cv.blurryMetrics(from: sampleBuffer)
+                let blurryMetrics = self.cv.blurryMetrics(from: sampleBuffer, samplingFrequency: 100)
                 self.label.text = "\(blurryMetrics)"
             }
         }

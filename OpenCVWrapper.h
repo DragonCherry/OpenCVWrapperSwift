@@ -13,7 +13,7 @@
 @interface OpenCVWrapper : NSObject
     
 - (NSString *)versionString;
-- (double)blurryMetricsFromImage:(UIImage *)image;
-- (double)blurryMetricsFromSampleBuffer:(CMSampleBufferRef)sampleBuffer;
+- (double)blurryMetricsFromImage:(UIImage *)image samplingFrequency:(int)frequency;
+- (double)blurryMetricsFromSampleBuffer:(CMSampleBufferRef)sampleBuffer samplingFrequency:(int)frequency;
     
 @end

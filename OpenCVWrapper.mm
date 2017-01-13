@@ -15,7 +15,7 @@
     return [NSString stringWithFormat:@"OpenCV version: %s", CV_VERSION];
 }
 
-- (double)blurryMetricsFromCVMat:(cv::Mat)matImage {
+- (double)blurryMetricsFromCVMat:(cv::Mat)matImage samplingFrequency:(int)frequency {
     
     cv::Mat grayImage;
     cv::Mat laplacianImage;
@@ -30,19 +30,20 @@
     unsigned char *pixels = laplacianImage8bit.data;
     unsigned long loop = laplacianImage8bit.elemSize() * laplacianImage8bit.total();
     double totalLap = 0;
+    int sampling = frequency > 0 ? frequency : 1;
     
-    for (int i = 0; i < loop; i++) {
+    for (int i = 0; i < loop; i += sampling) {
         totalLap += pixels[i];
     }
-    return totalLap / loop;
+    return totalLap / (loop / sampling);
 }
 
-- (double)blurryMetricsFromSampleBuffer:(CMSampleBufferRef)sampleBuffer {
-    return [self blurryMetricsFromCVMat: [self convertCMSampleBufferToCVMat: sampleBuffer]];
+- (double)blurryMetricsFromSampleBuffer:(CMSampleBufferRef)sampleBuffer samplingFrequency:(int)frequency {
+    return [self blurryMetricsFromCVMat: [self convertCMSampleBufferToCVMat: sampleBuffer] samplingFrequency: frequency];
 }
 
-- (double)blurryMetricsFromImage:(UIImage *)image {
-    return [self blurryMetricsFromCVMat: [self convertUIImageToCVMat:image]];
+- (double)blurryMetricsFromImage:(UIImage *)image samplingFrequency:(int)frequency {
+    return [self blurryMetricsFromCVMat: [self convertUIImageToCVMat:image] samplingFrequency: frequency];
 }
 
 - (cv::Mat)convertUIImageToCVMat:(UIImage *)image {
