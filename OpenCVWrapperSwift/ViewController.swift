@@ -28,31 +28,28 @@ class ViewController: CameraPreviewController {
         
         self.delegate = self
         
-        label = UILabel(height: 50)
-        
+        label = UILabel(height: 40, font: .systemFont(ofSize: 11), textColor: .white, backgroundColor: .black)
+        _ = view.attach(label, at: .topLeft, insets: UIEdgeInsets(top: 20, left: 20, bottom: 0, right: 0), widthMultiplier: 0.2)
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        
+        logw("Not enough memory.")
     }
 }
 
 
 extension ViewController: CameraPreviewControllerDelegate {
     
-    func cameraPreviewWillOutputSampleBuffer(buffer: CMSampleBuffer) {
-    }
-    
-    func cameraPreviewNeedsLayout(preview: GPUImageView) {
+    func cameraPreview(_ controller: CameraPreviewController, willOutput sampleBuffer: CMSampleBuffer, with sequence: UInt64) {
         
+        if captureSequence % 5 == 0 {
+            DispatchQueue.main.async {
+                let blurryMetrics = self.cv.blurryMetrics(from: sampleBuffer)
+                self.label.text = "\(blurryMetrics)"
+            }
+        }
     }
     
-    func cameraPreviewPreferredFillMode(preview: GPUImageView) -> Bool {
-        return false
-    }
-    
-    func cameraPreviewDetectedFaces(preview: GPUImageView, features: [CIFeature]?, aperture: CGRect, orientation: UIDeviceOrientation) {
-        
-    }
+    func cameraPreview(_ controller: CameraPreviewController, willFocusInto tappedLocationInView: CGPoint, tappedLocationInImage: CGPoint) {}
 }
